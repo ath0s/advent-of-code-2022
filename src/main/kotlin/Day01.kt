@@ -1,3 +1,4 @@
+import Day.Main
 import kotlin.io.path.useLines
 
 class Day01 : Day {
@@ -49,7 +50,7 @@ class Day01 : Day {
         return sums
     }
 
-    companion object : Day.Main("Day01.txt") {
+    companion object : Main("Day01.txt") {
 
         @JvmStatic
         fun main(args: Array<String>) = main()
