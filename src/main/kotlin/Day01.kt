@@ -3,12 +3,12 @@ import kotlin.io.path.useLines
 
 class Day01 : Day {
 
-    override fun partOne(filename: String, verbose: Boolean): Number {
+    override fun partOne(filename: String, verbose: Boolean): Any {
         val sums = calculateSums(filename, verbose)
         return sums.max()
     }
 
-    override fun partTwo(filename: String, verbose: Boolean): Number {
+    override fun partTwo(filename: String, verbose: Boolean): Any {
         val sums = calculateSums(filename, verbose)
         val topThree = sums.sortedDescending().take(3)
         return topThree.sum()

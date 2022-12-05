@@ -10,15 +10,15 @@ abstract class DayTest<D : Day>(
     @Language("file-reference") private val filename: String? = null
 ) {
 
-    open val partOneExpected: Number = -1
-    open val partTwoExpected: Number = -1
+    open val partOneExpected: Any? = -1
+    open val partTwoExpected: Any? = -1
 
     protected val target: D = ((javaClass.genericSuperclass as ParameterizedType).actualTypeArguments[0] as Class<*>).kotlin.newInstance()
 
     @Test
     fun `Part One`() {
         assumeNotNull(filename)
-        assumeFalse(partOneExpected.toInt() < 0)
+        assumeNotNull(partOneExpected)
 
         val result = target.partOne(filename, true)
 
@@ -28,7 +28,7 @@ abstract class DayTest<D : Day>(
     @Test
     fun `Part Two`() {
         assumeNotNull(filename)
-        assumeFalse(partTwoExpected.toInt() < 0)
+        assumeNotNull(partTwoExpected)
 
         val result = target.partTwo(filename, true)
 

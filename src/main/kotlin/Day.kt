@@ -4,9 +4,9 @@ import kotlin.time.measureTimedValue
 
 interface Day {
 
-    fun partOne(@Language("file-reference") filename: String, verbose: Boolean = false): Number
+    fun partOne(@Language("file-reference") filename: String, verbose: Boolean = false): Any
 
-    fun partTwo(@Language("file-reference") filename: String, verbose: Boolean = false): Number
+    fun partTwo(@Language("file-reference") filename: String, verbose: Boolean = false): Any
 
     abstract class Main(@Language("file-reference") private val filename: String) {
 

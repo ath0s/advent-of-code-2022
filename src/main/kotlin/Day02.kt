@@ -39,14 +39,14 @@ private val counterScore = mapOf(
 )
 
 class Day02 : Day {
-    override fun partOne(filename: String, verbose: Boolean): Number =
+    override fun partOne(filename: String, verbose: Boolean): Any =
         readRounds(filename).sumOf { (opponent, me) ->
             val myDrawScore = drawScore[me]!!
             val roundScore = roundScore[opponent to me]!!
             myDrawScore + roundScore
         }
 
-    override fun partTwo(filename: String, verbose: Boolean) =
+    override fun partTwo(filename: String, verbose: Boolean): Any =
         readRounds(filename).sumOf { (opponent, me) ->
             counterScore[opponent to me]!!
         }

@@ -5,13 +5,13 @@ private val priorities = ('a'..'z').mapIndexed { index, c -> c to index + 1 }.to
         ('A'..'Z').mapIndexed { index, c -> c to index + 27 }.toMap()
 
 class Day03 : Day {
-    override fun partOne(filename: String, verbose: Boolean): Number =
+    override fun partOne(filename: String, verbose: Boolean): Any =
         rucksacks(filename, verbose).sumOf { (firstCompartment, secondCompartment) ->
             val commonItems = firstCompartment.toSet().intersect(secondCompartment.toSet())
             commonItems.sumOf { priorities[it]!! }
         }
 
-    override fun partTwo(filename: String, verbose: Boolean): Number = filename.asPath().readLines()
+    override fun partTwo(filename: String, verbose: Boolean): Any = filename.asPath().readLines()
         .chunked(3)
         .sumOf { group ->
             val commonItems = group[0].toSet().intersect(group[1].toSet()).intersect(group[2].toSet())

@@ -2,12 +2,12 @@ import Day.Main
 import kotlin.io.path.readLines
 
 class Day04 : Day {
-    override fun partOne(filename: String, verbose: Boolean): Number =
+    override fun partOne(filename: String, verbose: Boolean): Any =
         rangePairs(filename).count { (first, second) ->
             first containsAll second || second containsAll first
         }
 
-    override fun partTwo(filename: String, verbose: Boolean): Number =
+    override fun partTwo(filename: String, verbose: Boolean): Any =
         rangePairs(filename).count { (first, second) ->
             first overlap second || second overlap first
         }
