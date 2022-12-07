@@ -10,8 +10,8 @@ abstract class DayTest<D : Day>(
     @Language("file-reference") private val filename: String? = null
 ) {
 
-    open val partOneExpected: Any? = -1
-    open val partTwoExpected: Any? = -1
+    open val partOneExpected: Any? = null
+    open val partTwoExpected: Any? = null
 
     protected val target: D = ((javaClass.genericSuperclass as ParameterizedType).actualTypeArguments[0] as Class<*>).kotlin.newInstance()
 
