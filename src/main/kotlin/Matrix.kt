@@ -7,6 +7,12 @@ typealias Matrix = Array<Array<Int>>
 val Matrix.length get() =
     size * get(0).size
 
+val Matrix.x get() =
+    this[0].indices
+
+val Matrix.y get() =
+    indices
+
 fun String.parseMatrix(): Matrix =
     asPath()
         .readLines()
@@ -27,6 +33,18 @@ fun Matrix.getAllNeighbors(coordinate: Coordinate) =
             Coordinate(x, y)
         }
     }.filter { it != coordinate }.filter { it in this }
+
+fun Matrix.getAllAbove(coordinate: Coordinate) =
+    (this.y.first until coordinate.y).reversed().map { y -> Coordinate(coordinate.x, y) }
+
+fun Matrix.getAllBelow(coordinate: Coordinate) =
+    (coordinate.y + 1..this.y.last).map { y -> Coordinate(coordinate.x, y) }
+
+fun Matrix.getAllLeft(coordinate: Coordinate) =
+    (this.x.first until coordinate.x).reversed().map { x -> Coordinate(x, coordinate.y) }
+
+fun Matrix.getAllRight(coordinate: Coordinate) =
+    (coordinate.x + 1..this.x.last).map { x -> Coordinate(x, coordinate.y) }
 
 fun Matrix.print(highlight: (Coordinate) -> Boolean) =
     forEachIndexed { y: Int, row: Array<Int> ->
@@ -76,7 +94,7 @@ fun Matrix.update(coordinate: Coordinate, transform: (Int) -> Int) {
 }
 
 fun Matrix.lastIndex() =
-    Coordinate(lastIndex, this[lastIndex].lastIndex)
+    Coordinate(x.last, y.last)
 
 operator fun Matrix.contains(coordinate: Coordinate) =
     coordinate.y in (0..lastIndex) && coordinate.x in (0..get(coordinate.y).lastIndex)
