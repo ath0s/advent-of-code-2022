@@ -1,7 +1,7 @@
 import Day.Main
 import kotlin.io.path.readLines
 
-private data class Instruction(
+private data class CrateInstruction(
     val numberOfCrates: Int,
     val from: Int,
     val to: Int
@@ -44,7 +44,7 @@ class Day05 : Day {
         return stacks.joinToString("") { it.last().toString() }
     }
 
-    private fun parseStacksAndInstructions(filename: String): Pair<List<MutableList<Char>>, List<Instruction>> {
+    private fun parseStacksAndInstructions(filename: String): Pair<List<MutableList<Char>>, List<CrateInstruction>> {
         val lines = filename.asPath().readLines()
         val stackLabelLineIndex = lines.indexOfFirst { it.all { char -> char.isWhitespace() || char.isDigit() } }
         val stackLines = lines.take(stackLabelLineIndex)
@@ -60,7 +60,7 @@ class Day05 : Day {
         val instructions = lines.drop(stackLabelLineIndex + 1).mapNotNull {
             instructionPattern.matchEntire(it)?.destructured
         }.map { (numberOfCrates, from, to) ->
-            Instruction(numberOfCrates.toInt(), from.toInt(), to.toInt())
+            CrateInstruction(numberOfCrates.toInt(), from.toInt(), to.toInt())
         }
         return stacks to instructions
     }
