@@ -1,4 +1,4 @@
-import org.junit.jupiter.api.Test
+import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class Day09Test : DayTest<Day09>("Day09_test.txt"){
