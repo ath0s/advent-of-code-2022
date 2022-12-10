@@ -28,6 +28,10 @@ jobs:
 
       - name: 💹 Publish Test Report
         if: always()
-        uses: scacap/action-surefire-report@v1
+        uses: dorny/test-reporter@v1
         with:
-          report_paths: '**/build/test-results/test/TEST-*.xml'
+          name: 'Test Results'
+          path: '**/build/test-results/test/TEST-*.xml'
+          reporter: 'java-junit'
+          list-suites: 'failed'
+          list-tests: 'failed'
