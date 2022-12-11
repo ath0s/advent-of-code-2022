@@ -17,7 +17,7 @@ internal fun String.md5(): String =
 internal fun String.asPath() =
     asResourceUrl()!!.toURI().toPath()
 
-internal fun <T> KClass<*>.newInstance() =
+internal fun <T> KClass<*>.newInstance(): T =
     constructors.filterIsInstance<KFunction<T>>().first().call()
 
 fun <T, R> Iterable<T>.mapToSet(transform: (T) -> R): Set<R> =
@@ -32,3 +32,17 @@ fun <T> Iterable<Iterable<T>>.flattenToSet(): Set<T> =
 private fun String.asResourceUrl() =
     Thread.currentThread().contextClassLoader.getResource(this)
 
+
+fun Iterable<Long>.lcm(): Long {
+    var multiplier = min()
+    while (true) {
+        if (all { multiplier % it == 0L }) {
+            return multiplier
+        }
+        multiplier++
+    }
+}
+
+operator fun <T> List<T>.component6(): T {
+    return get(5)
+}
