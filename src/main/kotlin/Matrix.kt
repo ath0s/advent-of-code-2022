@@ -2,24 +2,24 @@ import AnsiColor.RESET
 import AnsiColor.WHITE_BOLD_BRIGHT
 import kotlin.io.path.readLines
 
-typealias Matrix = Array<Array<Int>>
+typealias Matrix<T> = Array<Array<T>>
 
-val Matrix.length get() =
+val <T> Matrix<T>.length get() =
     size * get(0).size
 
-val Matrix.x get() =
+val <T> Matrix<T>.x get() =
     this[0].indices
 
-val Matrix.y get() =
+val <T> Matrix<T>.y get() =
     indices
 
-fun String.parseMatrix(): Matrix =
+fun String.parseMatrix(): Matrix<Int> =
     asPath()
         .readLines()
         .map { line -> line.map { char -> char.digitToInt() }.toTypedArray() }
         .toTypedArray()
 
-fun Matrix.getOrthogonalNeighbors(coordinate: Coordinate) =
+fun <T> Matrix<T>.getOrthogonalNeighbors(coordinate: Coordinate) =
     listOf(
         Coordinate(coordinate.x, coordinate.y - 1),
         Coordinate(coordinate.x - 1, coordinate.y),
@@ -27,27 +27,27 @@ fun Matrix.getOrthogonalNeighbors(coordinate: Coordinate) =
         Coordinate(coordinate.x, coordinate.y + 1)
     ).filter { it in this }
 
-fun Matrix.getAllNeighbors(coordinate: Coordinate) =
+fun <T> Matrix<T>.getAllNeighbors(coordinate: Coordinate) =
     (coordinate.y - 1..coordinate.y + 1).flatMap { y ->
         (coordinate.x - 1..coordinate.x + 1).map { x ->
             Coordinate(x, y)
         }
     }.filter { it != coordinate }.filter { it in this }
 
-fun Matrix.getAllAbove(coordinate: Coordinate) =
+fun <T> Matrix<T>.getAllAbove(coordinate: Coordinate) =
     (this.y.first until coordinate.y).reversed().map { y -> Coordinate(coordinate.x, y) }
 
-fun Matrix.getAllBelow(coordinate: Coordinate) =
+fun <T> Matrix<T>.getAllBelow(coordinate: Coordinate) =
     (coordinate.y + 1..this.y.last).map { y -> Coordinate(coordinate.x, y) }
 
-fun Matrix.getAllLeft(coordinate: Coordinate) =
+fun <T> Matrix<T>.getAllLeft(coordinate: Coordinate) =
     (this.x.first until coordinate.x).reversed().map { x -> Coordinate(x, coordinate.y) }
 
-fun Matrix.getAllRight(coordinate: Coordinate) =
+fun <T> Matrix<T>.getAllRight(coordinate: Coordinate) =
     (coordinate.x + 1..this.x.last).map { x -> Coordinate(x, coordinate.y) }
 
-fun Matrix.print(highlight: (Coordinate) -> Boolean) =
-    forEachIndexed { y: Int, row: Array<Int> ->
+fun <T> Matrix<T>.print(highlight: (Coordinate) -> Boolean) =
+    forEachIndexed { y: Int, row: Array<T> ->
         row.forEachIndexed { x, value ->
             if (highlight(Coordinate(x, y))) {
                 print("$WHITE_BOLD_BRIGHT$value$RESET")
@@ -58,25 +58,25 @@ fun Matrix.print(highlight: (Coordinate) -> Boolean) =
         println()
     }
 
-fun <R> Matrix.mapIndexedNotNull(transform: (Coordinate, Int) -> R?) =
+fun <T, R> Matrix<T>.mapIndexedNotNull(transform: (Coordinate, T) -> R?) =
     flatMapIndexed { y, row ->
         row.mapIndexedNotNull { x, value -> transform(Coordinate(x, y), value) }
     }
 
 
-fun Matrix.updateEach(transform: (Int) -> Int) =
+fun <T> Matrix<T>.updateEach(transform: (T) -> T) =
     forEachIndexed { coordinate, value ->
         set(coordinate, transform(value))
     }
 
-fun Matrix.forEachIndexed(action: (Coordinate, Int) -> Unit): Unit =
-    forEachIndexed { y: Int, row: Array<Int> ->
+fun <T> Matrix<T>.forEachIndexed(action: (Coordinate, T) -> Unit): Unit =
+    forEachIndexed { y: Int, row: Array<T> ->
         row.forEachIndexed { x, value ->
             action(Coordinate(x, y), value)
         }
     }
 
-fun Matrix.filterIndexed(predicate: (Coordinate, Int) -> Boolean) =
+fun <T> Matrix<T>.filterIndexed(predicate: (Coordinate, T) -> Boolean) =
     flatMapIndexed { y, row ->
         row.mapIndexedNotNull{ x, value ->
             val coordinate = Coordinate(x, y)
@@ -88,20 +88,20 @@ fun Matrix.filterIndexed(predicate: (Coordinate, Int) -> Boolean) =
         }
     }
 
-fun Matrix.update(coordinate: Coordinate, transform: (Int) -> Int) {
+fun <T> Matrix<T>.update(coordinate: Coordinate, transform: (T) -> T) {
     val previous = get(coordinate)
     set(coordinate, transform(previous))
 }
 
-fun Matrix.lastIndex() =
+fun <T> Matrix<T>.lastIndex() =
     Coordinate(x.last, y.last)
 
-operator fun Matrix.contains(coordinate: Coordinate) =
+operator fun <T> Matrix<T>.contains(coordinate: Coordinate) =
     coordinate.y in (0..lastIndex) && coordinate.x in (0..get(coordinate.y).lastIndex)
 
-operator fun Matrix.get(coordinate: Coordinate) =
+operator fun <T> Matrix<T>.get(coordinate: Coordinate) =
     this[coordinate.y][coordinate.x]
 
-operator fun Matrix.set(coordinate: Coordinate, value: Int) {
+operator fun <T> Matrix<T>.set(coordinate: Coordinate, value: T) {
     this[coordinate.y][coordinate.x] = value
 }
