@@ -105,3 +105,8 @@ operator fun <T> Matrix<T>.get(coordinate: Coordinate) =
 operator fun <T> Matrix<T>.set(coordinate: Coordinate, value: T) {
     this[coordinate.y][coordinate.x] = value
 }
+fun <T> Matrix<T>.switch(from: Coordinate, to: Coordinate) {
+    val old = this[to]
+    this[to] = this[from]
+    this[from] = old
+}
