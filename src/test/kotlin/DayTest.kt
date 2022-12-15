@@ -1,13 +1,10 @@
 import org.intellij.lang.annotations.Language
-import org.junit.jupiter.api.Assumptions.assumeFalse
 import java.lang.reflect.ParameterizedType
-import kotlin.contracts.ExperimentalContracts
-import kotlin.contracts.contract
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 abstract class DayTest<D : Day>(
-    @Language("file-reference") private val filename: String? = null
+    @Language("file-reference") protected val filename: String? = null
 ) {
 
     open val partOneExpected: Any? = null
@@ -16,7 +13,7 @@ abstract class DayTest<D : Day>(
     protected val target: D = ((javaClass.genericSuperclass as ParameterizedType).actualTypeArguments[0] as Class<*>).kotlin.newInstance()
 
     @Test
-    fun `Part One`() {
+    open fun `Part One`() {
         assumeNotNull(filename)
         assumeNotNull(partOneExpected)
 
@@ -26,7 +23,7 @@ abstract class DayTest<D : Day>(
     }
 
     @Test
-    fun `Part Two`() {
+    open fun `Part Two`() {
         assumeNotNull(filename)
         assumeNotNull(partTwoExpected)
 
@@ -34,13 +31,4 @@ abstract class DayTest<D : Day>(
 
         assertEquals(partTwoExpected, result)
     }
-
-    @OptIn(ExperimentalContracts::class)
-    private fun assumeNotNull(value: Any?) {
-        contract {
-            returns() implies (value != null)
-        }
-        assumeFalse(value == null)
-    }
-
 }

@@ -1,6 +1,7 @@
 import AnsiColor.RESET
 import AnsiColor.WHITE_BOLD_BRIGHT
 import kotlin.io.path.readLines
+import kotlin.math.abs
 
 typealias Matrix<T> = Array<Array<T>>
 
@@ -110,3 +111,6 @@ fun <T> Matrix<T>.switch(from: Coordinate, to: Coordinate) {
     this[to] = this[from]
     this[from] = old
 }
+
+fun manhattanDistance(c1: Coordinate, c2: Coordinate): Int =
+    abs(c1.y - c2.y) + abs(c1.x - c2.x)
