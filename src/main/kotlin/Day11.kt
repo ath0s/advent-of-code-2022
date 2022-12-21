@@ -100,105 +100,104 @@ class Day11 : Day {
         fun main(args: Array<String>) = main()
     }
 
-}
+    private sealed class Operand(val resolve: (oldValue: Long) -> Long) {
+        operator fun invoke(oldValue: Long) =
+            resolve(oldValue)
 
-private sealed class Operand(val resolve: (oldValue: Long) -> Long) {
-    operator fun invoke(oldValue: Long) =
-        resolve(oldValue)
+        abstract override fun toString(): String
+    }
 
-    abstract override fun toString(): String
-}
+    private object Variable : Operand({ it }) {
+        override fun toString() = "old"
+    }
 
-private object Variable : Operand({ it }) {
-    override fun toString() = "old"
-}
+    private class Literal(val value: Long) : Operand({ value }) {
+        override fun toString() = value.toString()
+    }
 
-private class Literal(val value: Long) : Operand({ value }) {
-    override fun toString() = value.toString()
-}
+    private sealed interface Operation {
+        fun calculate(oldValue: Long, verbose: Boolean = false): Long
 
-private sealed interface Operation {
-    fun calculate(oldValue: Long, verbose: Boolean = false): Long
+        override fun toString(): String
+    }
 
-    override fun toString(): String
-}
-
-private class Multiplication(private val leftOperand: Operand, private val rightOperand: Operand) : Operation {
-    override fun calculate(oldValue: Long, verbose: Boolean) =
-        (leftOperand(oldValue) * rightOperand(oldValue)).also { newValue ->
-            if (verbose) {
-                val rightOperandText = when (rightOperand) {
-                    is Variable -> "itself"
-                    is Literal -> rightOperand.value
+    private class Multiplication(private val leftOperand: Operand, private val rightOperand: Operand) : Operation {
+        override fun calculate(oldValue: Long, verbose: Boolean) =
+            (leftOperand(oldValue) * rightOperand(oldValue)).also { newValue ->
+                if (verbose) {
+                    val rightOperandText = when (rightOperand) {
+                        is Variable -> "itself"
+                        is Literal -> rightOperand.value
+                    }
+                    println("    Worry level is multiplied by $rightOperandText to $newValue")
                 }
-                println("    Worry level is multiplied by $rightOperandText to $newValue")
             }
-        }
 
-    override fun toString() = "$leftOperand * $rightOperand"
-}
+        override fun toString() = "$leftOperand * $rightOperand"
+    }
 
-private class Addition(private val leftOperand: Operand, private val rightOperand: Operand) : Operation {
-    override fun calculate(oldValue: Long, verbose: Boolean) =
-        leftOperand(oldValue) + rightOperand(oldValue).also { newValue ->
-            if (verbose) {
-                val rightOperandText = when (rightOperand) {
-                    is Variable -> "itself"
-                    is Literal -> rightOperand.value
+    private class Addition(private val leftOperand: Operand, private val rightOperand: Operand) : Operation {
+        override fun calculate(oldValue: Long, verbose: Boolean) =
+            leftOperand(oldValue) + rightOperand(oldValue).also { newValue ->
+                if (verbose) {
+                    val rightOperandText = when (rightOperand) {
+                        is Variable -> "itself"
+                        is Literal -> rightOperand.value
+                    }
+                    println("    Worry level is increased by $rightOperandText to $newValue")
                 }
-                println("    Worry level is increased by $rightOperandText to $newValue")
+            }
+
+        override fun toString() = "$leftOperand + $rightOperand"
+    }
+
+    private data class WorryLevelTest(
+        val divisor: Long,
+        val trueMonkeyIndex: Int,
+        val falseMonkeyIndex: Int
+    ) {
+
+        operator fun invoke(item: Long, verbose: Boolean = false): Int {
+            return if (item % divisor == 0L) {
+                if (verbose) {
+                    println("    Current worry level is divisible by $divisor.")
+                }
+                trueMonkeyIndex
+            } else {
+                if (verbose) {
+                    println("    Current worry level is not divisible by $divisor.")
+                }
+                falseMonkeyIndex
             }
         }
 
-    override fun toString() = "$leftOperand + $rightOperand"
-}
-
-private data class WorryLevelTest(
-    val divisor: Long,
-    val trueMonkeyIndex: Int,
-    val falseMonkeyIndex: Int
-) {
-
-    operator fun invoke(item: Long, verbose: Boolean = false): Int {
-        return if (item % divisor == 0L) {
-            if (verbose) {
-                println("    Current worry level is divisible by $divisor.")
-            }
-            trueMonkeyIndex
-        } else {
-            if (verbose) {
-                println("    Current worry level is not divisible by $divisor.")
-            }
-            falseMonkeyIndex
+        fun print(indentation: Int = 0) {
+            println("""${" ".repeat(indentation)}Test: divisible by $divisor""")
+            println("""${" ".repeat(indentation * 2)}If true: throw to monkey $trueMonkeyIndex""")
+            println("""${" ".repeat(indentation * 2)}If false: throw to monkey $falseMonkeyIndex""")
         }
     }
 
-    fun print(indentation: Int = 0) {
-        println("""${" ".repeat(indentation)}Test: divisible by $divisor""")
-        println("""${" ".repeat(indentation * 2)}If true: throw to monkey $trueMonkeyIndex""")
-        println("""${" ".repeat(indentation * 2)}If false: throw to monkey $falseMonkeyIndex""")
+    private data class Monkey(
+        val items: MutableList<Long>,
+        val operation: Operation,
+        val test: WorryLevelTest
+    ) {
+        var numberOfInspections = 0L
     }
-}
 
-private data class Monkey(
-    val items: MutableList<Long>,
-    val operation: Operation,
-    val test: WorryLevelTest
-) {
-    var numberOfInspections = 0L
-}
-
-private fun String.toOperation() =
-    split(" ").let { (leftOperand, operation, rightOperand) ->
-        when (operation) {
-            "*" -> Multiplication(leftOperand.toOperand(), rightOperand.toOperand())
-            "+" -> Addition(leftOperand.toOperand(), rightOperand.toOperand())
-            else -> throw IllegalArgumentException("Unknown operation $operation")
+    private fun String.toOperation() =
+        split(" ").let { (leftOperand, operation, rightOperand) ->
+            when (operation) {
+                "*" -> Multiplication(leftOperand.toOperand(), rightOperand.toOperand())
+                "+" -> Addition(leftOperand.toOperand(), rightOperand.toOperand())
+                else -> throw IllegalArgumentException("Unknown operation $operation")
+            }
         }
-    }
 
-private fun String.toOperand() =
-    when (this) {
-        "old" -> Variable
-        else -> Literal(toLong())
-    }
+    private fun String.toOperand() =
+        when (this) {
+            "old" -> Variable
+            else -> Literal(toLong())
+        }
+}
