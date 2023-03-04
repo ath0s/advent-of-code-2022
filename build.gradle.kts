@@ -20,7 +20,7 @@ dependencies {
 tasks {
 
     wrapper {
-        gradleVersion = "8.0"
+        gradleVersion = "8.0.2"
     }
 
     withType<JavaCompile> {

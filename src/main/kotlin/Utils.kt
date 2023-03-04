@@ -1,15 +1,7 @@
-import java.math.BigInteger
-import java.security.MessageDigest
 import kotlin.io.path.toPath
 import kotlin.reflect.KClass
 import kotlin.reflect.KFunction
 
-
-/**
- * Converts string to md5 hash.
- */
-internal fun String.md5(): String =
-    BigInteger(1, MessageDigest.getInstance("MD5").digest(toByteArray())).toString(16)
 
 /**
  * As a path on the classpath
@@ -43,6 +35,4 @@ fun Iterable<Long>.lcm(): Long {
     }
 }
 
-operator fun <T> List<T>.component6(): T {
-    return get(5)
-}
+operator fun <T> List<T>.component6(): T = get(5)
