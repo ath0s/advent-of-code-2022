@@ -2,7 +2,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.8.21"
+    kotlin("jvm") version "1.8.22"
 }
 
 repositories {
@@ -20,16 +20,16 @@ dependencies {
 tasks {
 
     wrapper {
-        gradleVersion = "8.1.1"
+        gradleVersion = "8.2"
     }
 
     withType<JavaCompile> {
         enabled = false
-        options.release.set(17)
+        options.release = 17
     }
 
     withType<KotlinCompile> {
-        compilerOptions.jvmTarget.set(JVM_17)
+        compilerOptions.jvmTarget = JVM_17
     }
 
     test {
