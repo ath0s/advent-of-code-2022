@@ -2,7 +2,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.8.22"
+    kotlin("jvm") version "1.9.0"
 }
 
 repositories {
@@ -12,15 +12,17 @@ repositories {
 dependencies {
     implementation(kotlin("reflect"))
 
-    testImplementation(platform("org.junit:junit-bom:5.9.3"))
+    testImplementation(platform("org.junit:junit-bom:5.10.0"))
     testImplementation("org.junit.jupiter:junit-jupiter-params")
     testImplementation(kotlin("test"))
+
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
 tasks {
 
     wrapper {
-        gradleVersion = "8.2"
+        gradleVersion = "8.3"
     }
 
     withType<JavaCompile> {
@@ -34,6 +36,9 @@ tasks {
 
     test {
         useJUnitPlatform()
+
+        systemProperty("junit.jupiter.execution.parallel.enabled", true)
+        systemProperty("junit.jupiter.execution.parallel.mode.default", "concurrent")
     }
 
 }

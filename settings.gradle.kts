@@ -1,7 +1,7 @@
 rootProject.name = "advent-of-code-2022"
 
 plugins {
-    id("com.gradle.enterprise") version ("3.12.1")
+    id("com.gradle.enterprise") version ("3.14.1")
 }
 
 gradleEnterprise {
