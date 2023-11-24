@@ -2,7 +2,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.9.0"
+    kotlin("jvm") version "1.9.21"
 }
 
 repositories {
@@ -12,7 +12,7 @@ repositories {
 dependencies {
     implementation(kotlin("reflect"))
 
-    testImplementation(platform("org.junit:junit-bom:5.10.0"))
+    testImplementation(platform("org.junit:junit-bom:5.10.1"))
     testImplementation("org.junit.jupiter:junit-jupiter-params")
     testImplementation(kotlin("test"))
 
@@ -22,7 +22,7 @@ dependencies {
 tasks {
 
     wrapper {
-        gradleVersion = "8.3"
+        gradleVersion = "8.4"
     }
 
     withType<JavaCompile> {
