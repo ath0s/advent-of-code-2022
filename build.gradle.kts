@@ -1,4 +1,4 @@
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_21
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -27,11 +27,11 @@ tasks {
 
     withType<JavaCompile> {
         enabled = false
-        options.release = 17
+        options.release = 21
     }
 
     withType<KotlinCompile> {
-        compilerOptions.jvmTarget = JVM_17
+        compilerOptions.jvmTarget = JVM_21
     }
 
     test {
