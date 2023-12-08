@@ -25,14 +25,16 @@ private fun String.asResourceUrl() =
     Thread.currentThread().contextClassLoader.getResource(this)
 
 
-fun Iterable<Long>.lcm(): Long {
-    var multiplier = min()
-    while (true) {
-        if (all { multiplier % it == 0L }) {
-            return multiplier
-        }
-        multiplier++
+tailrec fun gcd(a: Long, b: Long): Long =
+    if (b == 0L) {
+        a
+    } else {
+        gcd(b, a % b)
     }
-}
+
+fun lcm(a: Long, b: Long): Long = a * b / gcd(a, b)
+
+fun Iterable<Long>.lcm(): Long =
+    reduce(::lcm)
 
 operator fun <T> List<T>.component6(): T = get(5)
