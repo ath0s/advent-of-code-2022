@@ -10,6 +10,9 @@ on:
 jobs:
   Build:
     runs-on: ubuntu-latest
+    permissions:
+      checks: write
+      contents: write
     steps:
       - name: 🚚 Checkout
         uses: actions/checkout@v4
@@ -23,6 +26,8 @@ jobs:
       - name: 🐘 Setup Gradle
         uses: gradle/gradle-build-action@v2
         with:
+          dependency-graph: generate-and-submit
+          generate-job-summary: false
           gradle-home-cache-cleanup: true
 
       - name: 🛠 Build
